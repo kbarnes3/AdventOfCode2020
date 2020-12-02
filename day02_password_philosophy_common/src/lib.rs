@@ -1,6 +1,6 @@
 pub struct PasswordEntry {
-    pub min_count: u8,
-    pub max_count: u8,
+    pub min_count: usize,
+    pub max_count: usize,
     pub required_char: char,
     pub password: &'static str
 }
