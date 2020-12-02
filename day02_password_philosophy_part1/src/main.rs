@@ -1,8 +1,8 @@
 #[allow(unused_imports)]
-use day02_password_philosophy_common::{PasswordEntry, SAMPLE_DATA};
+use day02_password_philosophy_common::{PasswordEntry, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let valid_count = do_work(&SAMPLE_DATA);
+    let valid_count = do_work(&REAL_DATA);
     println!("{}", valid_count);
 }
 
