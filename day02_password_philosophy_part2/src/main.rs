@@ -9,8 +9,8 @@ fn main() {
 fn do_work(data: &[PasswordEntry]) -> u32 {
     let mut valid_count = 0;
     for entry in data.iter() {
-        if (entry.password.chars().nth(entry.min_count - 1) == Some(entry.required_char)) ^
-            (entry.password.chars().nth(entry.max_count - 1) == Some(entry.required_char)){
+        if (entry.password.chars().nth((entry.min_count - 1).into()) == Some(entry.required_char)) ^
+            (entry.password.chars().nth((entry.max_count - 1).into()) == Some(entry.required_char)){
             valid_count += 1;
         }
     }
