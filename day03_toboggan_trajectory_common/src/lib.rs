@@ -4,6 +4,11 @@ pub enum Space {
     Tree
 }
 
+pub struct Slope {
+    pub x_increment: usize,
+    pub y_increment: usize,
+}
+
 use Space::{Open, Tree};
 
 // Convert with:
@@ -11,6 +16,14 @@ use Space::{Open, Tree};
 // '<,'>s/$/],
 // '<,'>s/\./Open, /g
 // '<,'>s/#/Tree, /g
+
+pub const SLOPES: [Slope; 5] = [
+    Slope { x_increment: 1, y_increment: 1 },
+    Slope { x_increment: 3, y_increment: 1 },
+    Slope { x_increment: 5, y_increment: 1 },
+    Slope { x_increment: 7, y_increment: 1 },
+    Slope { x_increment: 1, y_increment: 2 },
+];
 
 pub const SAMPLE_DATA: [[Space; 11]; 11] = [
     [ Open, Open, Tree, Tree, Open, Open, Open, Open, Open, Open, Open, ],
