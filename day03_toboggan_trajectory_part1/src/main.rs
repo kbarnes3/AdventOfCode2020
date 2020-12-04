@@ -1,8 +1,8 @@
 #[allow(unused_imports)]
-use day03_toboggan_trajectory_common::{Space, SAMPLE_DATA};
+use day03_toboggan_trajectory_common::{Space, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
