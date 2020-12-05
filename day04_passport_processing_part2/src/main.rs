@@ -2,7 +2,7 @@
 use day04_passport_processing_common::{SAMPLE_DATA, SAMPLE_DATA_2, SAMPLE_DATA_3, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA_2);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
