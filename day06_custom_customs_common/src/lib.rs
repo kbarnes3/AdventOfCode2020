@@ -1,7 +1,20 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+// Transform with
+// '<,'>s/^/    "/ | '<,'>s/$/",/
+
+pub const SAMPLE_DATA: [&str; 15] = [
+    "abc",
+    "",
+    "a",
+    "b",
+    "c",
+    "",
+    "ab",
+    "ac",
+    "",
+    "a",
+    "a",
+    "a",
+    "a",
+    "",
+    "b",
+];
