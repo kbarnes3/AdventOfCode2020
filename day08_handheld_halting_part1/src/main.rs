@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 #[allow(unused_imports)]
-use day08_handheld_halting_common::{Instruction, SAMPLE_DATA};
+use day08_handheld_halting_common::{Instruction, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
