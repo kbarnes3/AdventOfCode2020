@@ -7,20 +7,20 @@ fn main() {
     println!("{}", result);
 }
 
-fn do_work(data: &'static [Instruction]) -> isize {
+fn do_work(data: &[Instruction]) -> isize {
     let mut computer = Computer::new(data);
     computer.run()
 }
 
-struct Computer {
-    instructions: &'static [Instruction],
+struct Computer<'a> {
+    instructions: &'a [Instruction],
     instruction_pointer: usize,
     accumulator: isize,
     seen_instructions: HashSet::<usize>,
 }
 
-impl Computer {
-    pub fn new(instructions: &'static [Instruction]) -> Computer {
+impl<'a> Computer<'a> {
+    pub fn new(instructions: &'a [Instruction]) -> Computer<'a> {
         Computer {
             instructions,
             instruction_pointer: 0,
