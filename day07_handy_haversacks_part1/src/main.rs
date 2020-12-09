@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 #[allow(unused_imports)]
-use day07_handy_haversacks_common::{BagInfo, TARGET_BAG, SAMPLE_DATA};
+use day07_handy_haversacks_common::{BagInfo, TARGET_BAG, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
