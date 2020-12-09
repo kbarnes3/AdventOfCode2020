@@ -37,7 +37,7 @@ impl<'a> Computer<'a> {
             self.seen_instructions.insert(self.instruction_pointer);
 
             match self.instructions[self.instruction_pointer] {
-                Instruction::Noop => self.instruction_pointer += 1,
+                Instruction::Noop(_) => self.instruction_pointer += 1,
                 Instruction::Accumulate(value) => {
                     self.accumulator += value;
                     self.instruction_pointer += 1
