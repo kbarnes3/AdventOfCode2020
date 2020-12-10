@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub enum Instruction {
     Noop(isize),
     Accumulate(isize),

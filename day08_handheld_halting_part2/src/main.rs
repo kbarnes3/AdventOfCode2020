@@ -4,12 +4,42 @@ use day08_handheld_halting_common::{Instruction, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
     let result = do_work(&REAL_DATA);
-    println!("{}", result);
+    match result {
+        Some(value) => println!("{}", value),
+        None => println!("No solution found")
+    }
 }
 
-fn do_work(data: &[Instruction]) -> isize {
-    let mut computer = Computer::new(data);
-    computer.run()
+fn do_work(data: &[Instruction]) -> Option<isize> {
+    let mut instructions = data.to_vec();
+
+    for i in 0..instructions.len() {
+        match instructions[i] {
+            Instruction::Noop(value) => {
+                instructions[i] = Instruction::Jump(value);
+                let mut computer = Computer::new(&instructions);
+                let result = computer.run();
+                match result {
+                    Some(value) => return Some(value),
+                    None => {},
+                }
+                instructions[i] = Instruction::Noop(value);
+            },
+            Instruction::Accumulate(_) => {},
+            Instruction::Jump(value) => {
+                instructions[i] = Instruction::Noop(value);
+                let mut computer = Computer::new(&instructions);
+                let result = computer.run();
+                match result {
+                    Some(value) => return Some(value),
+                    None => {},
+                }
+                instructions[i] = Instruction::Jump(value);
+            },
+        }
+    }
+
+    None
 }
 
 struct Computer<'a> {
@@ -29,10 +59,13 @@ impl<'a> Computer<'a> {
         }
     }
 
-    pub fn run(&mut self) -> isize {
+    pub fn run(&mut self) -> Option<isize> {
         loop {
+            if self.instruction_pointer == self.instructions.len() {
+                return Some(self.accumulator);
+            }
             if self.seen_instructions.contains(&self.instruction_pointer) {
-                return self.accumulator;
+                return None;
             }
             self.seen_instructions.insert(self.instruction_pointer);
 
