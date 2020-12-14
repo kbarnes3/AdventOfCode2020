@@ -1,8 +1,8 @@
 #[allow(unused_imports)]
-use day10_adapter_array_common::{SAMPLE_DATA_1, SAMPLE_DATA_2};
+use day10_adapter_array_common::{SAMPLE_DATA_1, SAMPLE_DATA_2, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA_2);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
