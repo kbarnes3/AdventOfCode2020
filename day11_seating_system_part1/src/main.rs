@@ -1,9 +1,9 @@
 use std::vec::Vec;
 #[allow(unused_imports)]
-use day11_seating_system_common::{Position, SAMPLE_DATA};
+use day11_seating_system_common::{Position, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
