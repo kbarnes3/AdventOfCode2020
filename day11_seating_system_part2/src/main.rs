@@ -25,10 +25,10 @@ fn do_work<Grid: AsRef<[Row]>, Row: AsRef<[Position]>>(data: Grid) -> usize {
                 let new_state = match old_state {
                     Position::Floor => Position::Floor,
                     Position::Empty | Position::Occupied => {
-                        let adjacent_occupied = get_adjacent_occupied(&old_positions, j, i);
+                        let adjacent_occupied = get_visible_occupied(&old_positions, j, i);
                         match adjacent_occupied {
                             count if count == 0 => Position::Occupied,
-                            count if count >= 4 => Position::Empty,
+                            count if count >= 5 => Position::Empty,
                             _ => old_state
                         }
                     }
@@ -109,66 +109,93 @@ fn copy_positions(source: &Vec::<Vec::<Position>>, dest: &mut Vec::<Vec::<Positi
     }
 }
 
-fn get_adjacent_occupied(data: &Vec::<Vec::<Position>>, row: usize, col: usize) -> usize {
+fn get_visible_occupied(data: &Vec::<Vec::<Position>>, row: usize, col: usize) -> usize {
     let mut count = 0;
+    const DIRECTIONS: [(RowDirection, ColDirection); 8] = [
+        (RowDirection::Left, ColDirection::Up),
+        (RowDirection::None, ColDirection::Up),
+        (RowDirection::Right, ColDirection::Up),
+        (RowDirection::Right, ColDirection::None),
+        (RowDirection::Right, ColDirection::Down),
+        (RowDirection::None, ColDirection::Down),
+        (RowDirection::Left, ColDirection::Down),
+        (RowDirection::Left, ColDirection::None)
+    ];
 
-    if (row > 0) && (col > 0) {
-        let up_left = data[col - 1][row - 1];
-        if is_occupied(up_left) {
-            count += 1;
-        }
-    }
-
-    if col > 0 {
-        let up = data[col - 1][row];
-        if is_occupied(up) {
-            count += 1;
-        }
-    }
-
-    if (row < data[col].len() - 1) && (col > 0) {
-        let up_right = data[col - 1][row + 1];
-        if is_occupied(up_right) {
-            count += 1;
-        }
-    }
-
-    if row < data[col].len() - 1 {
-        let right = data[col][row + 1];
-        if is_occupied(right) {
-            count += 1;
-        }
-    }
-
-    if (row < data[col].len() - 1) && (col < data.len() - 1) {
-        let bottom_right = data[col + 1][row + 1];
-        if is_occupied(bottom_right) {
-            count += 1;
-        }
-    }
-
-    if col < data.len() - 1 {
-        let bottom = data[col + 1][row];
-        if is_occupied(bottom) {
-            count += 1;
-        }
-    }
-
-    if (row > 0) && (col < data.len() - 1) {
-        let bottom_left = data[col + 1][row - 1];
-        if is_occupied(bottom_left) {
-            count += 1;
-        }
-    }
-
-    if row > 0 {
-        let left = data[col][row - 1];
-        if is_occupied(left) {
+    for direction in DIRECTIONS.iter() {
+        if is_visible_occupied_in_direction(data, row, col, direction.0, direction.1) {
             count += 1;
         }
     }
 
     count
+}
+
+#[derive(Copy, Clone)]
+enum RowDirection {
+    None,
+    Left,
+    Right,
+}
+
+#[derive(Copy, Clone)]
+enum ColDirection {
+    None,
+    Up,
+    Down,
+}
+
+fn is_visible_occupied_in_direction(
+    data: &Vec::<Vec::<Position>>,
+    start_row: usize,
+    start_col: usize,
+    row_direction: RowDirection,
+    col_direction: ColDirection
+) -> bool {
+    let mut row = start_row;
+    let mut col = start_col;
+
+    loop {
+        match col_direction {
+            ColDirection::None => col = col,
+            ColDirection::Up => {
+                if col == 0 {
+                    return false;
+                }
+                col -= 1;
+            },
+            ColDirection::Down => {
+                if col >= data.len() - 1 {
+                    return false;
+                }
+                col += 1;
+            }
+        }
+
+        match row_direction {
+            RowDirection::None => row = row,
+            RowDirection::Left => {
+                if row == 0 {
+                    return false;
+                }
+                row -= 1;
+            },
+            RowDirection::Right => {
+                if row >= data[col].len() - 1 {
+                    return false;
+                }
+                row += 1;
+            },
+        };
+
+        let position = data[col][row];
+        match position {
+            Position::Floor => (),
+            Position::Empty => return false,
+            Position::Occupied => return true,
+        }
+
+    }
 }
 
 fn is_occupied(position: Position) -> bool {
