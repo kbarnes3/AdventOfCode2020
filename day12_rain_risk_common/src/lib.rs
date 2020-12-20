@@ -1,11 +1,11 @@
 pub enum Instruction {
-    North(i32),
-    South(i32),
-    East(i32),
-    West(i32),
+    North(i64),
+    South(i64),
+    East(i64),
+    West(i64),
     Left(i32),
     Right(i32),
-    Forward(i32)
+    Forward(i64)
 }
 
 use Instruction::*;

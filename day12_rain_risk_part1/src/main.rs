@@ -7,7 +7,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn do_work(data: &[Instruction]) -> i32 {
+fn do_work(data: &[Instruction]) -> i64 {
     let mut boat = Boat::new();
 
     for instruction in data.iter() {
@@ -37,8 +37,8 @@ mod boat {
 
     pub struct Boat {
         bearing: Bearing,
-        x_pos: i32,
-        y_pos: i32
+        x_pos: i64,
+        y_pos: i64
     }
 
     impl Boat {
@@ -62,11 +62,11 @@ mod boat {
             }
         }
 
-        pub fn get_coordinates(&self) -> (i32, i32) {
+        pub fn get_coordinates(&self) -> (i64, i64) {
             (self.x_pos, self.y_pos)
         }
 
-        fn move_direction(&mut self, direction: Bearing, distance: i32) {
+        fn move_direction(&mut self, direction: Bearing, distance: i64) {
             match direction {
                 Bearing::North => self.y_pos -= distance,
                 Bearing::South => self.y_pos += distance,
@@ -75,7 +75,7 @@ mod boat {
             }
         }
 
-        fn move_forward(&mut self, distance: i32) {
+        fn move_forward(&mut self, distance: i64) {
             self.move_direction(self.bearing, distance);
         }
 

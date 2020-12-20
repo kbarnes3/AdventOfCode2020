@@ -7,7 +7,7 @@ fn main() {
     println!("{}", result);
 }
 
-fn do_work(data: &[Instruction]) -> i32 {
+fn do_work(data: &[Instruction]) -> i64 {
     let mut boat = Boat::new();
 
     for instruction in data.iter() {
@@ -37,16 +37,20 @@ mod boat {
 
     pub struct Boat {
         bearing: Bearing,
-        x_pos: i32,
-        y_pos: i32
+        boat_x_pos: i64,
+        boat_y_pos: i64,
+        waypoint_x_pos: i64,
+        waypoint_y_pos: i64,
     }
 
     impl Boat {
         pub fn new() -> Boat {
             Boat {
                 bearing: Bearing::East,
-                x_pos: 0,
-                y_pos: 0
+                boat_x_pos: 0,
+                boat_y_pos: 0,
+                waypoint_x_pos: 10,
+                waypoint_y_pos: -1,
             }
         }
 
@@ -62,20 +66,20 @@ mod boat {
             }
         }
 
-        pub fn get_coordinates(&self) -> (i32, i32) {
-            (self.x_pos, self.y_pos)
+        pub fn get_coordinates(&self) -> (i64, i64) {
+            (self.boat_x_pos, self.boat_y_pos)
         }
 
-        fn move_direction(&mut self, direction: Bearing, distance: i32) {
+        fn move_direction(&mut self, direction: Bearing, distance: i64) {
             match direction {
-                Bearing::North => self.y_pos -= distance,
-                Bearing::South => self.y_pos += distance,
-                Bearing::East => self.x_pos -= distance,
-                Bearing::West => self.x_pos += distance
+                Bearing::North => self.boat_y_pos -= distance,
+                Bearing::South => self.boat_y_pos += distance,
+                Bearing::East => self.boat_x_pos -= distance,
+                Bearing::West => self.boat_x_pos += distance
             }
         }
 
-        fn move_forward(&mut self, distance: i32) {
+        fn move_forward(&mut self, distance: i64) {
             self.move_direction(self.bearing, distance);
         }
 
