@@ -1,9 +1,9 @@
 #[allow(unused_imports)]
-use day12_rain_risk_common::{Instruction, SAMPLE_DATA};
+use day12_rain_risk_common::{Instruction, SAMPLE_DATA, REAL_DATA};
 use boat::Boat;
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
