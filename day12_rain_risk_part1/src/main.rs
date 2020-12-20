@@ -70,8 +70,8 @@ mod boat {
             match direction {
                 Bearing::North => self.y_pos -= distance,
                 Bearing::South => self.y_pos += distance,
-                Bearing::East => self.x_pos -= distance,
-                Bearing::West => self.x_pos += distance
+                Bearing::East => self.x_pos += distance,
+                Bearing::West => self.x_pos -= distance
             }
         }
 
