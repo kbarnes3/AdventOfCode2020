@@ -4,6 +4,7 @@ pub enum BusRoute {
 }
 
 pub struct BusNotes {
+    pub start_consecutive_search: u64,
     pub earliest_time: u64,
     pub bus_routes: &'static [BusRoute],
 }
@@ -13,6 +14,7 @@ use BusRoute::*;
 // Substitute with:
 // '<,'>s/\(\d\+\),/        Bus(\1),/ge | '<,'>s/x,/        OutOfService,/ge | '<,'>s/,/,\r/g
 pub const SAMPLE_DATA: BusNotes = BusNotes {
+    start_consecutive_search: 0,
     earliest_time: 939,
     bus_routes: &[
         Bus(7),
@@ -27,6 +29,7 @@ pub const SAMPLE_DATA: BusNotes = BusNotes {
 };
 
 pub const REAL_DATA: BusNotes = BusNotes {
+    start_consecutive_search: 100000000000000,
     earliest_time: 1008832,
     bus_routes: &[
         Bus(23),
