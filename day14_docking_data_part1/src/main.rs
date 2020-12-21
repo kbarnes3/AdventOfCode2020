@@ -1,9 +1,9 @@
 #[allow(unused_imports)]
-use day14_docking_data_common::{Instruction, SAMPLE_DATA};
+use day14_docking_data_common::{Instruction, SAMPLE_DATA, REAL_DATA};
 use computer::Computer;
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
