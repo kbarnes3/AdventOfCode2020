@@ -4,7 +4,7 @@ use std::vec::Vec;
 use day13_shuttle_safety_common::{BusRoute, BusNotes, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
