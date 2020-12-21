@@ -1,10 +1,10 @@
 use std::cmp::Ordering;
 use std::vec::Vec;
 #[allow(unused_imports)]
-use day13_shuttle_safety_common::{BusRoute, BusNotes, SAMPLE_DATA};
+use day13_shuttle_safety_common::{BusRoute, BusNotes, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
