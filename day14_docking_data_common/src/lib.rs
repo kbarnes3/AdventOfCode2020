@@ -14,6 +14,13 @@ pub const SAMPLE_DATA: [Instruction; 4] = [
     Store { address: 26, value: 1 },
 ];
 
+pub const SAMPLE_DATA_2: [Instruction; 4] = [
+    SetMask { and_mask: 0b000000000000000000000000000000110011, or_mask: 0b000000000000000000000000000000010010 , orig_mask: "000000000000000000000000000000X1001X" },
+    Store { address: 42, value: 100 },
+    SetMask { and_mask: 0b000000000000000000000000000000001011, or_mask: 0b000000000000000000000000000000000000 , orig_mask: "00000000000000000000000000000000X0XX" },
+    Store { address: 26, value: 1 },
+];
+
 pub const REAL_DATA: [Instruction; 551] = [
     SetMask { and_mask: 0b011011001111110101000011001101011010, or_mask: 0b011010001011100100000001001001000000 , orig_mask: "01101X001X111X010X0000X1001X010XX0X0" },
     Store { address: 4841, value: 3942 },
