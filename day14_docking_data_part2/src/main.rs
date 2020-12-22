@@ -45,7 +45,7 @@ mod computer {
 
         pub fn process_instruction(&mut self, instruction: &Instruction) {
             match instruction {
-                Instruction::SetMask { and_mask, or_mask } => {
+                Instruction::SetMask { and_mask, or_mask, .. } => {
                     self.and_mask = *and_mask;
                     self.or_mask = *or_mask;
                 },
