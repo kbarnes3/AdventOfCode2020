@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 #[allow(unused_imports)]
-use day15_rambunctious_recitation_common::{ITERATIONS, SAMPLE_DATA, REAL_DATA};
+use day15_rambunctious_recitation_common::{PART_2_ITERATIONS, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
     let result = do_work(&REAL_DATA);
@@ -16,7 +16,7 @@ fn do_work(starting_data: &[usize]) -> usize {
         spoken_numbers.insert(last_spoken, round);
     }
 
-    for round in starting_data.len()+1..=ITERATIONS {
+    for round in starting_data.len()+1..=PART_2_ITERATIONS {
         let next_spoken;
         if spoken_numbers.contains_key(&last_spoken) {
             let last_spoken_in = spoken_numbers[&last_spoken];
