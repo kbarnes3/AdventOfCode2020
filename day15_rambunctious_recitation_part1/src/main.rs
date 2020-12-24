@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 #[allow(unused_imports)]
-use day15_rambunctious_recitation_common::{ITERATIONS, SAMPLE_DATA};
+use day15_rambunctious_recitation_common::{ITERATIONS, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
