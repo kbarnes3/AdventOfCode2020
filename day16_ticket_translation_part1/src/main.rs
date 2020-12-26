@@ -1,8 +1,8 @@
 #[allow(unused_imports)]
-use day16_ticket_translation_common::{Rule, Ticket, Notes, SAMPLE_DATA};
+use day16_ticket_translation_common::{Rule, Ticket, Notes, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
