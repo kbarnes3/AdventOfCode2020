@@ -4,7 +4,7 @@ use std::vec::Vec;
 use day16_ticket_translation_common::{Rule, Ticket, Notes, SAMPLE_DATA_2, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA_2);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
@@ -22,11 +22,69 @@ fn do_work(data: &Notes) -> u64 {
 
     for ticket in data.nearby_tickets {
         if !has_invalid_fields(&data.rules, ticket) {
+            for (i, field) in ticket.fields.iter().enumerate() {
+                let candidate_rules = possible_rules.get_mut(i).unwrap();
+                let mut rules_to_remove = Vec::new();
 
+                for rule in candidate_rules.iter() {
+                    if !does_field_match_rule(rule, *field) {
+                        rules_to_remove.push(*rule);
+                    }
+                }
+
+                for rule in rules_to_remove.iter() {
+                    candidate_rules.remove(rule);
+                }
+            }
         }
     }
 
-    0
+    let mut progress_made = true;
+    let mut all_matched = false;
+    let mut known_rules = HashSet::with_capacity(data.rules.len());
+
+    while progress_made && !all_matched {
+        progress_made = false;
+        all_matched = true;
+
+        for candidate_rules in possible_rules.iter_mut() {
+            if candidate_rules.len() != 1 {
+                for known_rule in known_rules.iter() {
+                    progress_made |= candidate_rules.remove(known_rule);
+                }
+            }
+
+            if candidate_rules.len() == 1 {
+                for rule in candidate_rules.iter() {
+                    known_rules.insert(*rule);
+                }
+            } else {
+                all_matched = false;
+            }
+        }
+
+    }
+
+    if !all_matched {
+        println!("Warning: Not all fields are matched to rules");
+    }
+
+    let mut departure_product = 1;
+
+    for (i, candidate_rules) in possible_rules.iter().enumerate() {
+        if candidate_rules.len() != 1 {
+            println!("Warning: Field {} has {} candidate rules", i, candidate_rules.len());
+        }
+
+        for rule in candidate_rules.iter() {
+            // println!("{}: {}", i, rule.name);
+            if rule.name.starts_with("departure") {
+                departure_product *= data.my_ticket.fields[i];
+            }
+        }
+    }
+
+    departure_product
 }
 
 fn has_invalid_fields(rules: &[Rule], ticket: &Ticket) -> bool {
