@@ -2,10 +2,10 @@ use std::cmp::{ max, min };
 use std::collections::HashMap;
 
 #[allow(unused_imports)]
-use day17_conway_cubes_common::{Cube, CYCLES, SAMPLE_DATA};
+use day17_conway_cubes_common::{Cube, CYCLES, SAMPLE_DATA, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
@@ -83,7 +83,7 @@ fn do_work<Plane: AsRef<[Row]>, Row: AsRef<[Cube]>>(data: Plane) -> usize {
 
         dimension = new_dimension;
         min_coord = Vector3 { x: min_x-1, y: min_y-1, z: min_z-1 };
-        max_coord = Vector3 { x: max_x+2, y: max_y+1, z: max_z+1 };
+        max_coord = Vector3 { x: max_x+1, y: max_y+1, z: max_z+1 };
     }
 
     let mut active_cubes = 0;

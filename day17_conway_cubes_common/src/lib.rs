@@ -15,3 +15,14 @@ pub const SAMPLE_DATA: [[Cube; 3]; 3] = [
     [ Inactive, Inactive, Active, ],
     [ Active, Active, Active, ],
 ];
+
+pub const REAL_DATA: [[Cube; 8]; 8] = [
+    [ Active, Active, Active, Active, Active, Inactive, Inactive, Active, ],
+    [ Active, Inactive, Inactive, Active, Active, Active, Inactive, Active, ],
+    [ Active, Active, Active, Inactive, Inactive, Inactive, Inactive, Inactive, ],
+    [ Inactive, Active, Inactive, Active, Inactive, Active, Inactive, Inactive, ],
+    [ Active, Active, Inactive, Active, Inactive, Inactive, Active, Inactive, ],
+    [ Active, Active, Active, Active, Active, Active, Inactive, Inactive, ],
+    [ Inactive, Active, Active, Inactive, Inactive, Active, Active, Active, ],
+    [ Active, Active, Active, Inactive, Active, Active, Active, Active, ],
+];
