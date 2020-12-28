@@ -1,3 +1,5 @@
+use std::hash::{Hash, Hasher};
+
 pub struct ConsecutiveRange {
     pub min: u64,
     pub max: u64
@@ -6,6 +8,20 @@ pub struct ConsecutiveRange {
 pub struct Rule {
     pub name: &'static str,
     pub ranges: &'static [ConsecutiveRange],
+}
+
+impl PartialEq for Rule {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+
+impl Eq for Rule {}
+
+impl Hash for Rule {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.name.hash(state);
+    }
 }
 
 pub struct Ticket {
@@ -35,6 +51,22 @@ pub const SAMPLE_DATA: Notes = Notes {
         Ticket { fields: &[ 40,4,50 ] },
         Ticket { fields: &[ 55,2,20 ] },
         Ticket { fields: &[ 38,6,12 ] },
+    ],
+};
+
+pub const SAMPLE_DATA_2: Notes = Notes {
+    rules: &[
+        Rule { name: "class", ranges: &[ ConsecutiveRange { min: 0, max: 1 }, ConsecutiveRange { min: 4, max: 19 } ] },
+        Rule { name: "row", ranges: &[ ConsecutiveRange { min: 0, max: 5 }, ConsecutiveRange { min: 8, max: 19 } ] },
+        Rule { name: "seat", ranges: &[ ConsecutiveRange { min: 0, max: 13 }, ConsecutiveRange { min: 16, max: 19 } ] },
+    ],
+
+    my_ticket: Ticket { fields: &[ 11,12,13 ] },
+
+    nearby_tickets: &[
+        Ticket { fields: &[ 3,9,18 ] },
+        Ticket { fields: &[ 15,1,5 ] },
+        Ticket { fields: &[ 5,14,9 ] },
     ],
 };
 
