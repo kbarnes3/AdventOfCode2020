@@ -1,10 +1,10 @@
 use rayon::prelude::*;
 
 #[allow(unused_imports)]
-use day18_operation_order_common::{SAMPLE_DATA_1, SAMPLE_DATA_2};
+use day18_operation_order_common::{SAMPLE_DATA_1, SAMPLE_DATA_2, SAMPLE_DATA_3, REAL_DATA};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA_2);
+    let result = do_work(&REAL_DATA);
     println!("{}", result);
 }
 
