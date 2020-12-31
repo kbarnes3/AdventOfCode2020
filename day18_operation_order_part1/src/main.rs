@@ -1,10 +1,10 @@
 use rayon::prelude::*;
 
 #[allow(unused_imports)]
-use day18_operation_order_common::{SAMPLE_DATA_1};
+use day18_operation_order_common::{SAMPLE_DATA_1, SAMPLE_DATA_2};
 
 fn main() {
-    let result = do_work(&SAMPLE_DATA_1);
+    let result = do_work(&SAMPLE_DATA_2);
     println!("{}", result);
 }
 
@@ -37,7 +37,7 @@ fn process_operation(left_hand_side: u64, remaining_line: &str) -> u64 {
 fn process_right_hand_side(left_hand_side: u64, operation: Operation, right_hand_side: &str) -> u64 {
     let (next_number, remaining_line) = match right_hand_side.chars().nth(0).unwrap() {
         '0'..='9' => parse_next_number(right_hand_side),
-        '(' => panic!("Implement me!"),
+        '(' => parse_parentheses(right_hand_side),
         _ => panic!("Unexpected string: {}", right_hand_side)
     };
 
@@ -78,4 +78,35 @@ fn parse_next_number(remaining_line: &str) -> (u64, &str) {
     let remaining_line = &remaining_line[index_past_number..];
 
     (number, remaining_line)
+}
+
+fn parse_parentheses(remaining_line: &str) -> (u64, &str) {
+    let mut depth = 1;
+
+    let mut index_of_closing_paren = 1;
+
+    while index_of_closing_paren < remaining_line.len() {
+        let byte = remaining_line.bytes().nth(index_of_closing_paren).unwrap();
+        if byte == '(' as u8 {
+            depth += 1;
+        } else if byte == ')' as u8 {
+            depth -= 1;
+        }
+
+        if depth == 0 {
+            break;
+        }
+
+        index_of_closing_paren += 1;
+    }
+
+    if index_of_closing_paren == remaining_line.len() {
+        panic!("Couldn't find closing paren");
+    }
+
+    let inside_of_parentheses = &remaining_line[1..index_of_closing_paren];
+    let remaining_line = &remaining_line[index_of_closing_paren+1..];
+    let value_of_parentheses = solve_line(inside_of_parentheses);
+
+    (value_of_parentheses, remaining_line)
 }
