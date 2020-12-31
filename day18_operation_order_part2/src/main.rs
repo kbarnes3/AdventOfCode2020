@@ -1,3 +1,5 @@
+use std::vec::Vec;
+
 use rayon::prelude::*;
 
 #[allow(unused_imports)]
@@ -14,102 +16,141 @@ fn do_work(data: &[&str]) -> u64 {
     sum
 }
 
+#[derive(Copy, Clone, PartialEq)]
 enum Operation {
     Addition,
     Multiplication,
+    Exponent,
+    Parentheses,
+    EndOfLine,
+}
+
+enum Token {
+    Space,
+    Number(u64),
+    LeftParenthesis,
+    RightParenthesis,
+    Operator(Operation),
 }
 
 fn solve_line(line: &str) -> u64 {
-    sum_right_hand_side(0,line)
-}
+    let mut values = Vec::new();
+    let mut operators = Vec::new();
+    let mut remaining_line = line;
 
-fn process_operation(left_hand_side: u64, remaining_line: &str) -> u64 {
-    let operation = match remaining_line.chars().nth(0).unwrap() {
-        '+' => Operation::Addition,
-        '*' => Operation::Multiplication,
-        _ => panic!("Unable to parse operation from {}", remaining_line)
-    };
+    while remaining_line.len() > 0 {
+        let parsed = parse_next_token(remaining_line);
+        let next_token = parsed.0;
+        remaining_line = parsed.1;
 
-    let right_hand_side = &remaining_line[2..];
-    match operation {
-        Operation::Addition => sum_right_hand_side(left_hand_side, right_hand_side),
-        Operation::Multiplication => {
-            let right_hand_side_value = solve_line(right_hand_side);
-            left_hand_side * right_hand_side_value
+        match next_token {
+            Token::Space => (),
+            Token::Number(value) => values.push(value),
+            Token::LeftParenthesis => operators.push(Operation::Parentheses),
+            Token::RightParenthesis => process_operators(&mut values, &mut operators, Operation::Parentheses),
+            Token::Operator(operator) => {
+                process_operators(&mut values, &mut operators, operator);
+                operators.push(operator);
+            }
         }
     }
+
+    process_operators(&mut values, &mut operators, Operation::EndOfLine);
+
+    if values.len() != 1 {
+        panic!("Unexpected number of values");
+    }
+
+    if operators.len() != 0 {
+        panic!("Unexpected number of operators");
+    }
+
+    *values.get(0).unwrap()
 }
 
-fn sum_right_hand_side(left_hand_side: u64, right_hand_side: &str) -> u64 {
-    let (next_number, remaining_line) = match right_hand_side.chars().nth(0).unwrap() {
-        '0'..='9' => parse_next_number(right_hand_side),
-        '(' => parse_parentheses(right_hand_side),
-        _ => panic!("Unexpected string: {}", right_hand_side)
-    };
-
-    let left_hand_side = left_hand_side + next_number;
-
-    match remaining_line.len() {
-        0 => left_hand_side,
-        1 => panic!("We shouldn't have exactly 1 byte left"),
-        _ => {
-            let after_space = &remaining_line[1..];
-            process_operation(left_hand_side, after_space)
-        },
+fn parse_next_token(line: &str) -> (Token, &str) {
+    match line.chars().nth(0).unwrap() {
+        '0'..='9' => parse_number(line),
+        '(' => parse_single_char_token(Token::LeftParenthesis, line),
+        ')' => parse_single_char_token(Token::RightParenthesis, line),
+        '+' => parse_single_char_token(Token::Operator(Operation::Addition), line),
+        '*' => parse_single_char_token(Token::Operator(Operation::Multiplication), line),
+        '^' => parse_single_char_token(Token::Operator(Operation::Exponent), line),
+        ' ' => parse_single_char_token(Token::Space, line),
+        _ => panic!("Unable to parse token from {}", line)
     }
 }
 
-fn parse_next_number(remaining_line: &str) -> (u64, &str) {
-    if remaining_line.len() == 0 {
-        panic!("We shouldn't try to parse an empty slice");
+fn parse_number(line: &str) -> (Token, &str) {
+    if line.len() == 0 {
+        panic!("Unable to parse_number on an empty line");
     }
-    
+
     let mut index_past_number = 0;
-
-    while index_past_number < remaining_line.len() {
-        let byte = remaining_line.bytes().nth(index_past_number).unwrap();
+    while index_past_number < line.len() {
+        let byte = line.bytes().nth(index_past_number).unwrap();
         if (byte < '0' as u8) || (byte > '9' as u8) {
             break;
         }
 
         index_past_number += 1;
     }
-    
-    let number = &remaining_line[0..index_past_number];
+
+    let number = &line[0..index_past_number];
     let number = number.parse().unwrap();
 
-    let remaining_line = &remaining_line[index_past_number..];
+    let remaining_line = &line[index_past_number..];
 
-    (number, remaining_line)
+    (Token::Number(number), remaining_line)
 }
 
-fn parse_parentheses(remaining_line: &str) -> (u64, &str) {
-    let mut depth = 1;
+fn parse_single_char_token(token: Token, line: &str) -> (Token, &str) {
+    (token, &line[1..])
+}
 
-    let mut index_of_closing_paren = 1;
+fn process_operators(values: &mut Vec::<u64>, operators: &mut Vec::<Operation>, reason: Operation) {
+    while operators.len() != 0 {
+        let operator = operators.pop().unwrap();
+        match operator {
+            Operation::Addition => {
+                if reason != Operation::Exponent {
+                    let right_hand_side = values.pop().unwrap();
+                    let left_hand_side = values.pop().unwrap();
 
-    while index_of_closing_paren < remaining_line.len() {
-        let byte = remaining_line.bytes().nth(index_of_closing_paren).unwrap();
-        if byte == '(' as u8 {
-            depth += 1;
-        } else if byte == ')' as u8 {
-            depth -= 1;
-        }
+                    let sum = left_hand_side + right_hand_side;
+                    values.push(sum);
+                } else {
+                    operators.push(operator);
+                    break;
+                }
+            },
+            Operation::Multiplication => {
+                if (reason != Operation::Exponent) && 
+                    (reason != Operation::Addition) {
+                    let right_hand_side = values.pop().unwrap();
+                    let left_hand_side = values.pop().unwrap();
 
-        if depth == 0 {
-            break;
-        }
+                    let product = left_hand_side * right_hand_side;
+                    values.push(product);
+                } else {
+                    operators.push(operator);
+                    break;
+                }
+            },
+            Operation::Exponent => {
+                let right_hand_side = values.pop().unwrap() as u32;
+                let left_hand_side = values.pop().unwrap();
 
-        index_of_closing_paren += 1;
+                let power = left_hand_side.pow(right_hand_side);
+                values.push(power);
+            },
+            Operation::Parentheses => {
+                if reason != Operation::Parentheses {
+                    operators.push(operator);
+                }
+                break;
+            },
+            Operation::EndOfLine => panic!("EndOfLine shouldn't be in the operations queue")
+        };
     }
-
-    if index_of_closing_paren == remaining_line.len() {
-        panic!("Couldn't find closing paren");
-    }
-
-    let inside_of_parentheses = &remaining_line[1..index_of_closing_paren];
-    let remaining_line = &remaining_line[index_of_closing_paren+1..];
-    let value_of_parentheses = solve_line(inside_of_parentheses);
-
-    (value_of_parentheses, remaining_line)
 }
