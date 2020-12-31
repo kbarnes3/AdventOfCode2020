@@ -20,7 +20,7 @@ enum Operation {
 }
 
 fn solve_line(line: &str) -> u64 {
-    process_right_hand_side(0, Operation::Addition, line)
+    sum_right_hand_side(0,line)
 }
 
 fn process_operation(left_hand_side: u64, remaining_line: &str) -> u64 {
@@ -31,20 +31,23 @@ fn process_operation(left_hand_side: u64, remaining_line: &str) -> u64 {
     };
 
     let right_hand_side = &remaining_line[2..];
-    process_right_hand_side(left_hand_side, operation, right_hand_side)
+    match operation {
+        Operation::Addition => sum_right_hand_side(left_hand_side, right_hand_side),
+        Operation::Multiplication => {
+            let right_hand_side_value = solve_line(right_hand_side);
+            left_hand_side * right_hand_side_value
+        }
+    }
 }
 
-fn process_right_hand_side(left_hand_side: u64, operation: Operation, right_hand_side: &str) -> u64 {
+fn sum_right_hand_side(left_hand_side: u64, right_hand_side: &str) -> u64 {
     let (next_number, remaining_line) = match right_hand_side.chars().nth(0).unwrap() {
         '0'..='9' => parse_next_number(right_hand_side),
         '(' => parse_parentheses(right_hand_side),
         _ => panic!("Unexpected string: {}", right_hand_side)
     };
 
-    let left_hand_side = match operation {
-        Operation::Addition => left_hand_side + next_number,
-        Operation::Multiplication => left_hand_side * next_number
-    };
+    let left_hand_side = left_hand_side + next_number;
 
     match remaining_line.len() {
         0 => left_hand_side,
