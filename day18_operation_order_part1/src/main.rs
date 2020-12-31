@@ -1,3 +1,5 @@
+use rayon::prelude::*;
+
 #[allow(unused_imports)]
 use day18_operation_order_common::{SAMPLE_DATA_1};
 
@@ -7,11 +9,7 @@ fn main() {
 }
 
 fn do_work(data: &[&str]) -> u64 {
-    let mut sum = 0;
-
-    for line in data.iter() {
-        sum += solve_line(line);
-    }
+    let sum = data.par_iter().map(|line| solve_line(line)).sum();
 
     sum
 }

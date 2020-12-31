@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 day18_operation_order_common = { path = "../day18_operation_order_common" }
+rayon = "1.5"
