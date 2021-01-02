@@ -3,10 +3,10 @@ use std::collections::HashMap;
 use rayon::prelude::*;
 
 #[allow(unused_imports)]
-use day19_monster_messages_common::{RuleDescription, Rule, TARGET_RULE, SAMPLE_RULES, SAMPLE_MESSAGES};
+use day19_monster_messages_common::{RuleDescription, Rule, TARGET_RULE, SAMPLE_RULES, SAMPLE_MESSAGES, REAL_RULES, REAL_MESSAGES};
 
 fn main() {
-    let result = do_work(&SAMPLE_RULES, &SAMPLE_MESSAGES);
+    let result = do_work(&REAL_RULES, &REAL_MESSAGES);
     println!("{}", result);
 }
 
