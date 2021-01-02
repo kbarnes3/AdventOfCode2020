@@ -13,8 +13,13 @@ pub struct Rule {
 
 pub const TARGET_RULE: u64 = 0;
 
+pub const REPLACEMENT_RULES: [Rule; 2] = [
+    Rule { id: 8, description: Or(&[ 42, ], &[ 42, 8, ]) },
+    Rule { id: 11, description: Or(&[ 42, 31, ], &[ 42, 11, 31, ]) },
+];
+
 // Substitute with:
-// '<,'>s/\(\d\+\): "\(\w\)"/    Rule { id: \1, description: Literal('\2') } ,/ | '<,'>s/\(\d\)$/\1,/ | '<,'>s/\(\d\) /\1, /g | '<,'>s/\(\d\+\): \(.*\) | \(.*\)/    Rule { id: \1, description: Or(\&[ \2 ], \&[ \3 ]) },/ | '<,'>s/\(\d\+\): \(.*\)/    Rule { id: \1, description: Sequence(\&[ \2 ]) },/
+// '<,'>s/\(\d\+\): "\(\w\)"/    Rule { id: \1, description: Literal('\2') } ,/e | '<,'>s/\(\d\)$/\1,/ | '<,'>s/\(\d\) /\1, /g | '<,'>s/\(\d\+\): \(.*\) | \(.*\)/    Rule { id: \1, description: Or(\&[ \2 ], \&[ \3 ]) },/ | '<,'>s/\(\d\+\): \(.*\)/e    Rule { id: \1, description: Sequence(\&[ \2 ]) },/e
 pub const SAMPLE_RULES: [Rule; 6] = [
     Rule { id: 0, description: Sequence(&[ 4, 1, 5, ]) },
     Rule { id: 1, description: Or(&[ 2, 3, ], &[ 3, 2, ]) },
@@ -32,6 +37,58 @@ pub const SAMPLE_MESSAGES: [&str; 5] = [
     "abbbab",
     "aaabbb",
     "aaaabbb",
+];
+
+pub const SAMPLE_RULES_2: [Rule; 31] = [
+    Rule { id: 42, description: Or(&[ 9, 14, ], &[ 10, 1, ]) },
+    Rule { id: 9, description: Or(&[ 14, 27, ], &[ 1, 26, ]) },
+    Rule { id: 10, description: Or(&[ 23, 14, ], &[ 28, 1, ]) },
+    Rule { id: 1, description: Literal('a') } ,
+    Rule { id: 11, description: Sequence(&[ 42, 31, ]) },
+    Rule { id: 5, description: Or(&[ 1, 14, ], &[ 15, 1, ]) },
+    Rule { id: 19, description: Or(&[ 14, 1, ], &[ 14, 14, ]) },
+    Rule { id: 12, description: Or(&[ 24, 14, ], &[ 19, 1, ]) },
+    Rule { id: 16, description: Or(&[ 15, 1, ], &[ 14, 14, ]) },
+    Rule { id: 31, description: Or(&[ 14, 17, ], &[ 1, 13, ]) },
+    Rule { id: 6, description: Or(&[ 14, 14, ], &[ 1, 14, ]) },
+    Rule { id: 2, description: Or(&[ 1, 24, ], &[ 14, 4, ]) },
+    Rule { id: 0, description: Sequence(&[ 8, 11, ]) },
+    Rule { id: 13, description: Or(&[ 14, 3, ], &[ 1, 12, ]) },
+    Rule { id: 15, description: Or(&[ 1, ], &[ 14, ]) },
+    Rule { id: 17, description: Or(&[ 14, 2, ], &[ 1, 7, ]) },
+    Rule { id: 23, description: Or(&[ 25, 1, ], &[ 22, 14, ]) },
+    Rule { id: 28, description: Sequence(&[ 16, 1, ]) },
+    Rule { id: 4, description: Sequence(&[ 1, 1, ]) },
+    Rule { id: 20, description: Or(&[ 14, 14, ], &[ 1, 15, ]) },
+    Rule { id: 3, description: Or(&[ 5, 14, ], &[ 16, 1, ]) },
+    Rule { id: 27, description: Or(&[ 1, 6, ], &[ 14, 18, ]) },
+    Rule { id: 14, description: Literal('b') } ,
+    Rule { id: 21, description: Or(&[ 14, 1, ], &[ 1, 14, ]) },
+    Rule { id: 25, description: Or(&[ 1, 1, ], &[ 1, 14, ]) },
+    Rule { id: 22, description: Sequence(&[ 14, 14, ]) },
+    Rule { id: 8, description: Sequence(&[ 42, ]) },
+    Rule { id: 26, description: Or(&[ 14, 22, ], &[ 1, 20, ]) },
+    Rule { id: 18, description: Sequence(&[ 15, 15, ]) },
+    Rule { id: 7, description: Or(&[ 14, 5, ], &[ 1, 21, ]) },
+    Rule { id: 24, description: Sequence(&[ 14, 1, ]) },
+];
+
+pub const SAMPLE_MESSAGES_2: [&str; 15] = [
+    "abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa",
+    "bbabbbbaabaabba",
+    "babbbbaabbbbbabbbbbbaabaaabaaa",
+    "aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
+    "bbbbbbbaaaabbbbaaabbabaaa",
+    "bbbababbbbaaaaaaaabbababaaababaabab",
+    "ababaaaaaabaaab",
+    "ababaaaaabbbaba",
+    "baabbaaaabbaaaababbaababb",
+    "abbbbabbbbaaaababbbbbbaaaababb",
+    "aaaaabbaabaaaaababaa",
+    "aaaabbaaaabbaaa",
+    "aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
+    "babaaabbbaaabaababbaabababaaab",
+    "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba",
 ];
 
 pub const REAL_RULES: [Rule; 136] = [
